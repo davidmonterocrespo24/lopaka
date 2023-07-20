@@ -66,11 +66,12 @@ body {
 canvas {
   cursor: crosshair;
   image-rendering: pixelated;
-  background: #ed791b;
+  
   text-rendering: "geometricPrecision";
   font-smooth: never;
   -webkit-font-smoothing : none;
   opacity: 0.9;
+  background: #101010;
 }
 
 .fui-editor {
@@ -107,14 +108,32 @@ canvas {
   margin-left: 16px;
 }
 
+.fui-grid {
+  background-size: 4px 4px;
+  background-image: linear-gradient(to right, #aaa 0.5px, transparent 0), linear-gradient(to bottom, #aaa 0.5px, transparent 0)
+}
+
 .canvas-wrapper {
-  border: 3px solid var(--border-color);
+  border: 3px solid;
   border-radius: 10px;
-  background: var(--primary-color);
   padding: 8px;
   margin: 16px 0;
   display: inline-block;
   font-size: 0;
+  border-color: #0c293b;
+  background: #1d1d1d;
+}
+
+.canvas-wrapper_flipper {
+  border-color: var(--border-color);
+  background: var(--primary-color);
+}
+
+.canvas-wrapper_flipper canvas {
+  background: #ed791b;
+}
+.canvas-wrapper_flipper .fui-grid {
+  background-image: linear-gradient(to right, var(--bg-color) 0.5px, transparent 0), linear-gradient(to bottom, var(--bg-color) 0.5px, transparent 0)
 }
 
 .fui-canvas_select {
@@ -373,11 +392,6 @@ canvas {
 }
 .fui-select__label {
   font-size: 24px;
-}
-
-.fui-grid {
-  background-size: 4px 4px;
-  background-image: linear-gradient(to right, var(--bg-color) 0.5px, transparent 0), linear-gradient(to bottom, var(--bg-color) 0.5px, transparent 0)
 }
 
 a {

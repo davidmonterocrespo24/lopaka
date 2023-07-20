@@ -1,3 +1,7 @@
+const rgbBlackArray = [0, 0, 0];
+const rgbWhiteArray = [255, 255, 255];
+const drawColor = rgbWhiteArray;
+
 function bline(imgData, x0, y0, x1, y1, canvasWidth, canvasHeight, scale) {
     const resultArr = [];
     const dx = Math.abs(x1 - x0),
@@ -24,9 +28,9 @@ function bline(imgData, x0, y0, x1, y1, canvasWidth, canvasHeight, scale) {
         const [x, y] = resultArr[i];
         const n = (y * canvasWidth + x) * scale;
 
-        imgData.data[n] = 0;
-        imgData.data[n + 1] = 0;
-        imgData.data[n + 2] = 0;
+        imgData.data[n] = drawColor[0];
+        imgData.data[n + 1] = drawColor[1];
+        imgData.data[n + 2] = drawColor[2];
         imgData.data[n + 3] = 255;
     }
 }
@@ -68,9 +72,9 @@ function drawCircle(imgData, centerX, centerY, radius, canvasWidth, canvasHeight
         const [x, y] = resultArr[i];
         const n = (y * canvasWidth + x) * 4;
 
-        imgData.data[n] = 0;
-        imgData.data[n + 1] = 0;
-        imgData.data[n + 2] = 0;
+        imgData.data[n] = drawColor[0];
+        imgData.data[n + 1] = drawColor[1];
+        imgData.data[n + 2] = drawColor[2];
         imgData.data[n + 3] = 255;
     }
 }
@@ -105,34 +109,34 @@ function drawDisc(imgData, centerX, centerY, radius, canvasWidth, canvasHeight) 
         const [x, y] = resultArr[i];
         if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight) {
             const n = (y * canvasWidth + x) * 4;
-            imgData.data[n] = 0;
-            imgData.data[n + 1] = 0;
-            imgData.data[n + 2] = 0;
+            imgData.data[n] = drawColor[0];
+            imgData.data[n + 1] = drawColor[1];
+            imgData.data[n + 2] = drawColor[2];
             imgData.data[n + 3] = 255;
         }
     }
 }
 
-function maskBlack(context, isInverted, canvasWidth, canvasHeight) {
+function maskBlack(context, canvasWidth, canvasHeight) {
     const imgData = context.getImageData(
         0,
         0,
         canvasWidth,
         canvasHeight
     )
-    for (var i = 0; i < imgData.data.length; i += 4) {
-        if (
-            imgData.data[i + 3] === 255
-            &&
-            imgData.data[i] + imgData.data[i + 1] + imgData.data[i + 2] <= 381) {
-            imgData.data[i] = 0; // R
-            imgData.data[i + 1] = 0; // G
-            imgData.data[i + 2] = 0; // B
-            imgData.data[i + 3] = 255; // alpha
-        } else {
-            imgData.data[i + 3] = 0; // alpha
-        }
-    }
+    // for (var i = 0; i < imgData.data.length; i += 4) {
+    //     if (
+    //         imgData.data[i + 3] === 255
+    //         &&
+    //         imgData.data[i] + imgData.data[i + 1] + imgData.data[i + 2] <= 381) {
+    //         imgData.data[i] = 0; // R
+    //         imgData.data[i + 1] = 0; // G
+    //         imgData.data[i + 2] = 0; // B
+    //         imgData.data[i + 3] = 255; // alpha
+    //     } else {
+    //         imgData.data[i + 3] = 0; // alpha
+    //     }
+    // }
     return imgData;
 }
 

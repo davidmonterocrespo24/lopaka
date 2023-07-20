@@ -1,5 +1,5 @@
 const fuiCanvasComponent = {
-    template: `<div class="canvas-wrapper">
+    template: `<div class="canvas-wrapper" :class="wrapperClassNames">
     <div class="fui-grid">
         <canvas id="screen"
             :width="canvasWidth"
@@ -17,6 +17,7 @@ const fuiCanvasComponent = {
     </div>`,
     props: {
         display: String,
+        library: String,
         layerIndex: Number,
         activeTool: String,
         screenElements: Array,
@@ -44,14 +45,19 @@ const fuiCanvasComponent = {
     //     }
     // },
     computed: {
-        canvasSize() {
-            return this.display.split("×");
+        wrapperClassNames() {
+            return {
+                "canvas-wrapper_flipper": this.library === "flipper"
+            }
         },
         canvasClassNames() {
             return {
                 'fui-canvas_select': this.activeTool === 'select',
                 'fui-canvas_moving': this.isMoving,
             }
+        },
+        canvasSize() {
+            return this.display.split("×");
         },
         canvasWidth() {
             return parseInt(this.canvasSize[0]);
@@ -74,6 +80,8 @@ const fuiCanvasComponent = {
 
         this.CTX.strokeWidth = 1;
         this.CTX.textRendering = "optimizeSpeed";
+        this.CTX.fillStyle = "#fff";
+        this.CTX.strokeStyle = "#fff";
 
         document.addEventListener("mouseup", this.canvasMouseUp);
         this.$refs.screen.addEventListener("contextmenu", event => { event.preventDefault(); });
@@ -368,7 +376,7 @@ const fuiCanvasComponent = {
                     this.CTX.fillText(text, x, y);
                 }
             }
-            const newImgData = maskBlack(this.CTX, this.isInverted, this.canvasWidth, this.canvasHeight);
+            const newImgData = maskBlack(this.CTX, this.canvasWidth, this.canvasHeight);
             this.CTX.putImageData(newImgData, 0, 0);
             this.CTX.restore();
         },

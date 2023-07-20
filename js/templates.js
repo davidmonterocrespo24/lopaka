@@ -19,6 +19,7 @@ const fuiRootTmpl = `
           ref="fuiCanvas"
           :key="display"
           :display="display"
+          :library="library"
           :layer-index="layerIndex"
           :screen-elements="screenElements"
           :current-layer="currentLayer"
