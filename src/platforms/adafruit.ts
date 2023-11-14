@@ -7,7 +7,7 @@ import {IconLayer} from '../core/layers/icon.layer';
 import {LineLayer} from '../core/layers/line.layer';
 import {PaintLayer} from '../core/layers/paint.layer';
 import {TextLayer} from '../core/layers/text.layer';
-import { fontTypes } from "../draw/fonts/fontTypes";
+import {fontTypes} from '../draw/fonts/fontTypes';
 import {imgDataToUint32Array, toCppVariableName} from '../utils';
 import {Platform} from './platform';
 
@@ -15,10 +15,13 @@ export class AdafruitPlatform extends Platform {
     public static id = 'adafruit_gfx';
     protected name = 'Adafruit GFX';
     protected description = 'Adafruit GFX';
-    protected fonts: TPlatformFont[] = [
-        fontTypes['adafruit'],
-    ];
+    protected fonts: TPlatformFont[] = [fontTypes['adafruit']];
     private color = 'SSD1306_WHITE';
+
+    constructor() {
+        super();
+        this.features.hasCustomFontSize = true;
+    }
 
     addDot(layer: DotLayer, source: TSourceCode): void {
         source.code.push(`display.drawPixel(${layer.position.x}, ${layer.position.y},  ${this.color});`);
