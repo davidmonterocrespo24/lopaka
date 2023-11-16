@@ -42,29 +42,25 @@ display.print("${layer.text}");`);
 
     addBox(layer: BoxLayer, source: TSourceCode): void {
         source.code.push(
-            `display.drawRect(${layer.position.x}, ${layer.position.y}, ${layer.size.x + 1}, ${layer.size.y + 1}, ${
-                this.color
-            });`
+            `display.fillRect(${layer.position.x}, ${layer.position.y}, ${layer.size.x}, ${layer.size.y}, ${this.color});`
         );
     }
 
     addCircle(layer: CircleLayer, source: TSourceCode): void {
         const {radius, position} = layer;
-        const center = position.clone().add(radius).add(1);
+        const center = position.clone().add(radius);
         source.code.push(`display.drawCircle(${center.x}, ${center.y}, ${radius},  ${this.color});`);
     }
 
     addDisc(layer: DiscLayer, source: TSourceCode): void {
         const {radius, position} = layer;
-        const center = position.clone().add(radius).add(1);
+        const center = position.clone().add(radius);
         source.code.push(`display.fillCircle(${center.x}, ${center.y}, ${radius}, ${this.color});`);
     }
 
     addFrame(layer: FrameLayer, source: TSourceCode): void {
         source.code.push(
-            `display.drawRect(${layer.position.x}, ${layer.position.y}, ${layer.size.x + 1}, ${layer.size.y + 1}, ${
-                this.color
-            });`
+            `display.drawRect(${layer.position.x}, ${layer.position.y}, ${layer.size.x}, ${layer.size.y}, ${this.color});`
         );
     }
 
@@ -80,9 +76,12 @@ display.print("${layer.text}");`);
                 .getContext('2d')
                 .getImageData(layer.position.x, layer.position.y, layer.size.x, layer.size.y);
         }
-        const XBMP = imgDataToUint32Array(image);
+        const XBMP = imgDataToXBMP(image, 0, 0, layer.size.x, layer.size.y, true);
         const varName = `image_${toCppVariableName(layer.name)}_bits`;
-        source.declarations.push(`static const unsigned char PROGMEM ${varName}[] = {${XBMP}};`);
+        const varDeclaration = `static const unsigned char PROGMEM ${varName}[] = {${XBMP}};`;
+        if (!source.declarations.includes(varDeclaration)) {
+            source.declarations.push(varDeclaration);
+        }
         source.code.push(
             `display.drawBitmap(${layer.position.x}, ${layer.position.y}, ${varName}, ${layer.size.x}, ${layer.size.y}, ${this.color});`
         );
